@@ -8,16 +8,31 @@ class Field:
 	def __init__(self, fieldSize):
 		self.fieldSize = fieldSize
 		self.ships = []		
+		self.missiles = []	
 
 	def initField(self):
 		self.fields = [pow(2, i) for i in range(pow(self.fieldSize, 2))]
 
 	def printField(self):
+		row = 0
+		for i in range(self.fieldSize + 1):
+			if i > 0 and i < 10:
+				print ' {} '.format(i - 1),
+			elif i > 9:
+				print ' {}'.format(i - 1),
+			else:
+				print ' ',
 		for i, val in enumerate(self.fields):
-			if i % self.fieldSize == 0 and i > 0:
+			if i % self.fieldSize == 0 :
 				print
-			if self.isShipOnArea(val):
+				print row,
+				row += 1
+			if self.isShipOnArea(val) and self.isMissileOnArea(val) == False:
+				print '[o]',
+			elif self.isShipOnArea(val) and self.isMissileOnArea(val):
 				print '[x]',
+			elif self.isShipOnArea(val) == False and self.isMissileOnArea(val):
+				print '[-]',
 			else:
 				print '[ ]',
 		print
@@ -27,8 +42,12 @@ class Field:
 			areaToTry = self.getRandomShipAreaForSize(ship.size)
 			if (self.isShipOnArea(areaToTry) == False):
 				self.ships.append(areaToTry)
-				print "Ship has been placed to {}".format(str(bin(areaToTry))[2:])
 				return
+
+	def placeMissile(self, missile):
+		missileHit = 1 << missile.x << missile.y * self.fieldSize
+		self.missiles.append(missileHit)
+		return self.isShipOnArea(missileHit)
 
 	def getRandomShipAreaForSize(self, size):
 
@@ -44,8 +63,23 @@ class Field:
                                 areaToTry = areaToTry | areaToTry << self.fieldSize
 		return areaToTry
 
+	def hasRemainingShips(self):
+		allShips = 0
+		allMissiles = 0
+		for ship in self.ships:
+			allShips = allShips | ship
+		for missile in self.missiles:
+			allMissiles = allMissiles | missile
+		return (allShips & allMissiles) != allShips
+
 	def isShipOnArea(self, area):
 		for ship in self.ships:
 			if ship & area > 0:
+				return True
+		return False
+
+	def isMissileOnArea(self, area):
+		for missile in self.missiles:
+			if missile & area > 0:
 				return True
 		return False
