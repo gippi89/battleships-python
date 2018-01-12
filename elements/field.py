@@ -1,4 +1,5 @@
 from elements.ship import Ship
+import random
 
 class Field:
 
@@ -6,30 +7,45 @@ class Field:
 
 	def __init__(self, fieldSize):
 		self.fieldSize = fieldSize
+		self.ships = []		
 
 	def initField(self):
-		self.fields = [self.createFieldRowForIndex(i, self.fieldSize) for i in range(self.fieldSize)]
-
-	def createFieldRowForIndex(self, index, rowSize):
-		rowStartIndex = index * rowSize
-		return [self.createFieldValueForField(rowStartIndex + i) for i in range(rowSize)]
-
-	def createFieldValueForField(self, k):
-		return pow(2, k)
+		self.fields = [pow(2, i) for i in range(pow(self.fieldSize, 2))]
 
 	def printField(self):
-		for i in self.fields:
-			for j in i:
+		for i, val in enumerate(self.fields):
+			if i % self.fieldSize == 0 and i > 0:
+				print
+			if self.isShipOnArea(val):
+				print '[x]',
+			else:
 				print '[ ]',
-			print
+		print
 
-	def placeShip(self, ship):
-		print 'New ship with size {} has been placed'.format(ship.size)
-		print 'Free Areas: {}'.format(self.getFreeAreasForSize(ship.size))
+	def placeShip(self, ship):		
+		while True:	
+			areaToTry = self.getRandomShipAreaForSize(ship.size)
+			if (self.isShipOnArea(areaToTry) == False):
+				self.ships.append(areaToTry)
+				print "Ship has been placed to {}".format(str(bin(areaToTry))[2:])
+				return
 
-	def getFreeAreasForSize(self, size):
-		freeAreas = []
-		for i in range(self.fields[-1][-1]):
-			if i % size == 0:
-				freeAreas.insert(i)
-		return freeAreas
+	def getRandomShipAreaForSize(self, size):
+
+                if random.randint(0, 10) % 2 == 0:
+			# Horizontal
+			areaToTry = 1 << random.randint(0, self.fieldSize - size) << (self.fieldSize * random.randint(0, self.fieldSize - 1))
+			for i in range(size - 1):
+				areaToTry = areaToTry | areaToTry << 1
+                else:
+			#Vertical
+                        areaToTry = 1 << random.randint(0, pow(self.fieldSize, 2) - (size * self.fieldSize))
+                        for i in range(size - 1):
+                                areaToTry = areaToTry | areaToTry << self.fieldSize
+		return areaToTry
+
+	def isShipOnArea(self, area):
+		for ship in self.ships:
+			if ship & area > 0:
+				return True
+		return False
