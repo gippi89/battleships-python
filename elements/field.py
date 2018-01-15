@@ -1,4 +1,5 @@
 from elements.ship import Ship
+from elements.fieldPrinter import FieldPrinter
 import random
 
 class Field:
@@ -12,30 +13,10 @@ class Field:
 
 	def initField(self):
 		self.fields = [pow(2, i) for i in range(pow(self.fieldSize, 2))]
+		self.fieldPrinter = FieldPrinter(self)
 
 	def printField(self):
-		row = 0
-		for i in range(self.fieldSize + 1):
-			if i > 0 and i < 10:
-				print ' {} '.format(i - 1),
-			elif i > 9:
-				print ' {}'.format(i - 1),
-			else:
-				print ' ',
-		for i, val in enumerate(self.fields):
-			if i % self.fieldSize == 0 :
-				print
-				print row,
-				row += 1
-			if self.isShipOnArea(val) and self.isMissileOnArea(val) == False:
-				print '[o]',
-			elif self.isShipOnArea(val) and self.isMissileOnArea(val):
-				print '[x]',
-			elif self.isShipOnArea(val) == False and self.isMissileOnArea(val):
-				print '[-]',
-			else:
-				print '[ ]',
-		print
+		self.fieldPrinter.printField()
 
 	def placeShip(self, ship):		
 		while True:	
