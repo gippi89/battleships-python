@@ -9,8 +9,8 @@ class Field:
 	def __init__(self, fieldSize, name):
 		self.fieldSize = fieldSize
 		self.name = name
-		self.ships = []		
-		self.missiles = []	
+		self.ships = 0		
+		self.missiles = 0	
 
 	def initField(self):
 		self.fields = [pow(2, i) for i in range(pow(self.fieldSize, 2))]
@@ -26,12 +26,12 @@ class Field:
 		while True:	
 			areaToTry = self.getRandomShipAreaForSize(ship.size)
 			if (self.isShipOnArea(areaToTry) == False):
-				self.ships.append(areaToTry)
+				self.ships = self.ships | areaToTry
 				return
 
 	def placeMissile(self, missile):
 		missileHit = 1 << missile.x << missile.y * self.fieldSize
-		self.missiles.append(missileHit)
+		self.missiles = self.missiles | missileHit
 		return self.isShipOnArea(missileHit)
 
 	def getRandomShipAreaForSize(self, size):
@@ -49,22 +49,10 @@ class Field:
 		return areaToTry
 
 	def hasRemainingShips(self):
-		allShips = 0
-		allMissiles = 0
-		for ship in self.ships:
-			allShips = allShips | ship
-		for missile in self.missiles:
-			allMissiles = allMissiles | missile
-		return (allShips & allMissiles) != allShips
+		return (self.ships & self.missiles) != self.ships
 
 	def isShipOnArea(self, area):
-		for ship in self.ships:
-			if ship & area > 0:
-				return True
-		return False
+		return self.ships & area > 0
 
 	def isMissileOnArea(self, area):
-		for missile in self.missiles:
-			if missile & area > 0:
-				return True
-		return False
+		return self.missiles & area > 0 
