@@ -6,8 +6,9 @@ class Field:
 
 	"""A class that represents the game field"""
 
-	def __init__(self, fieldSize):
+	def __init__(self, fieldSize, name):
 		self.fieldSize = fieldSize
+		self.name = name
 		self.ships = []		
 		self.missiles = []	
 
@@ -15,8 +16,11 @@ class Field:
 		self.fields = [pow(2, i) for i in range(pow(self.fieldSize, 2))]
 		self.fieldPrinter = FieldPrinter(self)
 
-	def printField(self):
-		self.fieldPrinter.printField()
+	def printFieldWithShips(self):
+		self.fieldPrinter.printFieldWithShips()
+
+	def printFieldWithoutShips(self):
+		self.fieldPrinter.printFieldWithoutShips()
 
 	def placeShip(self, ship):		
 		while True:	
