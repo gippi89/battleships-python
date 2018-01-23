@@ -12,10 +12,10 @@ def cls():
 
 def playRound(player, enemie):
 	cls()
-	print enemie.name
+	print(enemie.name)
 	enemie.printFieldWithoutShips()
-	print
-	print player.name
+	print()
+	print(player.name)
 	player.printFieldWithShips()
 	
 	x = int(raw_input('{} Bitte X eingeben '.format(player.name)))
@@ -25,12 +25,12 @@ def playRound(player, enemie):
 	hit = enemie.placeMissile(missile)
 
 	if hit == True:
-		print "Juhu getroffen"
+		print("Juhu getroffen")
 	else:
-		print "Leider nicht getroffen"
+		print("Leider nicht getroffen")
 
 	if enemie.hasRemainingShips() == False:
-		print '{} hat gewonnen!'.format(player.name)
+		print('{} hat gewonnen!'.format(player.name))
 		raw_input("Beenden")
 		exit()
 	raw_input("Weiter")

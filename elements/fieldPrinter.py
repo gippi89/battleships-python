@@ -15,27 +15,27 @@ class FieldPrinter:
 		row = 0
 		for i in range(self.field.fieldSize + 1):                                        
 			if i > 0 and i < 10:                                               
-				print ' {} '.format(i - 1),                                
+				print(' {} '.format(i - 1),)
 			elif i > 9:                                                        
-				print ' {}'.format(i - 1),                                
+				print(' {}'.format(i - 1),)                                
 			else:
-				print '  ', 
+				print ('  ',)
 
 		for i, val in enumerate(self.field.fields):                                      
 			if i % self.field.fieldSize == 0 :
 				print                                                      
 				if row < 10:                                               
-					print '{} '.format(row),                           
+					print('{} '.format(row),)                           
 				else:                                                      
-					print row,                                         
+					print(row,)                                         
 				row += 1                                                   
 			if self.field.isShipOnArea(val) and self.field.isMissileOnArea(val) == False and withShips == True:
-				print '[o]',                                               
+				print('[o]',)                                               
 			elif self.field.isShipOnArea(val) and self.field.isMissileOnArea(val):         
-				print '[x]',                                               
+				print('[x]',)                                               
 			elif self.field.isShipOnArea(val) == False and self.field.isMissileOnArea(val):
-				print '[-]',                                               
+				print('[-]',)                                               
 			else:                                                              
-				print '[ ]',                                               
+				print('[ ]',)                                               
 		print
 

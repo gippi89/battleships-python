@@ -35,17 +35,21 @@ class Field:
 		return self.isShipOnArea(missileHit)
 
 	def getRandomShipAreaForSize(self, size):
-
                 if random.randint(0, 10) % 2 == 0:
-			# Horizontal
-			areaToTry = 1 << random.randint(0, self.fieldSize - size) << (self.fieldSize * random.randint(0, self.fieldSize - 1))
-			for i in range(size - 1):
-				areaToTry = areaToTry | areaToTry << 1
+			return self.getHorizontalRandomShipAreaForSize(size)
                 else:
-			#Vertical
-                        areaToTry = 1 << random.randint(0, pow(self.fieldSize, 2) - (size * self.fieldSize))
-                        for i in range(size - 1):
-                                areaToTry = areaToTry | areaToTry << self.fieldSize
+			return self.getVerticalRandomShipAreaForSize(size)
+	
+	def getHorizontalRandomShipAreaForSize(self, size):
+		areaToTry = 1 << random.randint(0, self.fieldSize - size) << (self.fieldSize * random.randint(0, self.fieldSize - 1))
+		for i in range(size - 1):
+			areaToTry = areaToTry | areaToTry << 1
+		return areaToTry
+
+	def getVerticalRandomShipAreaForSize(self, size):
+		areaToTry = 1 << random.randint(0, pow(self.fieldSize, 2) - (size * self.fieldSize))
+		for i in range(size - 1):
+			areaToTry = areaToTry | areaToTry << self.fieldSize
 		return areaToTry
 
 	def hasRemainingShips(self):
